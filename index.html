@@ -1186,6 +1186,25 @@ nav.scrolled .nav-links a:hover{color:var(--dark)}
   .cal-day{font-size:12px}
 }
 
+/* ══ GENERADOR DE INVITACIÓN — segunda tarjeta dentro de #calendario ══ */
+.inv-card{
+  background:var(--white);border-radius:22px;border:3px solid var(--dark);
+  box-shadow:var(--sticker-sh-lg);padding:28px 24px 24px;text-align:left;
+  margin-top:24px;
+}
+.inv-card-title{
+  font-family:var(--font-serif);font-weight:800;font-size:20px;color:var(--dark);margin-bottom:4px;
+}
+.inv-sub{font-size:11.5px;color:rgba(91,47,168,.6);margin:0 0 16px}
+.inv-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.inv-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inv-preview{display:flex;justify-content:center}
+#invCanvas{width:100%;max-width:300px;height:auto;border-radius:14px;box-shadow:var(--sticker-sh-sm);background:#fff}
+.inv-temas{display:flex;gap:9px;flex-wrap:wrap}
+.inv-tema{width:36px;height:36px;border-radius:50%;border:3px solid rgba(91,47,168,.3);cursor:pointer;padding:0;transition:transform .15s var(--bounce),border-color .15s}
+.inv-tema[aria-pressed="true"]{border-color:var(--dark);transform:scale(1.12);box-shadow:var(--sticker-sh-sm)}
+@media(max-width:560px){.inv-grid{grid-template-columns:1fr}.inv-preview{order:-1;margin-bottom:6px}}
+
 /* ══ MODAL de reserva — mismo patrón que .postcard-modal (ver RESEÑAS),
    tarjeta clara con formulario en vez de cita. ══ */
 .reserva-modal{
@@ -2475,6 +2494,44 @@ footer{background:var(--dark);position:relative;overflow:hidden;padding:0 0 24px
         <span><i class="cal-dot cal-dot-full"></i>Ocupado</span>
       </div>
     </div>
+
+    <div class="inv-card reveal">
+      <h3 class="inv-card-title">Arma la invitación de tu peque</h3>
+      <p class="inv-sub">Se guarda como imagen, lista para el grupo de la escuela.</p>
+      <div class="inv-grid">
+        <div class="inv-controls">
+          <div class="reserva-form-group">
+            <label for="inv-nombre">Nombre del festejado</label>
+            <input type="text" id="inv-nombre" maxlength="18" value="Emiliano">
+          </div>
+          <div class="inv-row2">
+            <div class="reserva-form-group">
+              <label for="inv-edad">Edad</label>
+              <input type="number" id="inv-edad" min="1" max="15" inputmode="numeric" value="6">
+            </div>
+            <div class="reserva-form-group">
+              <label for="inv-fecha">Fecha</label>
+              <input type="date" id="inv-fecha">
+            </div>
+          </div>
+          <div class="reserva-form-group">
+            <label for="inv-hora">Hora (opcional)</label>
+            <input type="time" id="inv-hora">
+          </div>
+          <div class="reserva-form-group">
+            <label>Tema</label>
+            <div class="inv-temas" id="invTemas" role="group" aria-label="Tema de color"></div>
+          </div>
+        </div>
+        <div class="inv-preview">
+          <canvas id="invCanvas" width="1080" height="1350" role="img" aria-label="Vista previa de la invitación"></canvas>
+        </div>
+      </div>
+      <button type="button" id="invSave" class="btn-primary" style="width:100%;justify-content:center;margin-top:4px">
+        Guardar invitación
+      </button>
+      <p class="reserva-form-hint" id="invHint">Escribe el nombre y elige un color, la invitación se arma sola.</p>
+    </div>
   </div>
   <svg class="wave-divider wave-to-dark" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,10 1440,50 L1440,100 L0,100 Z"/></svg>
 </section>
@@ -2511,8 +2568,10 @@ footer{background:var(--dark);position:relative;overflow:hidden;padding:0 0 24px
         <label for="rf-correo">Correo</label>
         <input type="email" id="rf-correo" placeholder="Ej. karla@correo.com" autocomplete="email" inputmode="email" required>
       </div>
-      <button type="submit" class="btn-wa" style="width:100%;justify-content:center">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+      <!-- [EDITAR-REGLA] Este botón SOLO dice "Reservar fecha" — nunca
+           "Reservar por WhatsApp", nunca el ícono/color de WhatsApp (clase
+           btn-wa). Pedido explícito del cliente (korvel), no reintroducir. -->
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center">
         Reservar fecha
       </button>
       <p class="reserva-form-hint">Te confirmamos disponibilidad el mismo día.</p>
@@ -3734,6 +3793,95 @@ Estamos en Apodaca, sobre Reforma y Privada Santa Martha. El acceso es fácil y 
     window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
     cerrarModal();
     form.reset();
+  });
+})();
+
+/* ── GENERADOR DE INVITACIÓN — convive con el calendario, no lo reemplaza ──
+   Dibuja una invitación en canvas SOLO con formas, degradados y texto (nunca
+   fotos, para que toBlob nunca truene por canvas contaminado). Los 8 temas
+   son fijos; solo cambian los colores (salen de la paleta del :root). */
+var INV_SALON = 'WonderFun Party Place';
+var INV_DIR   = 'Apodaca, N.L.';
+(function(){
+  var canvas=document.getElementById('invCanvas');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var W=canvas.width, H=canvas.height;
+  var cs=getComputedStyle(document.documentElement);
+  function v(n,f){ var x=(cs.getPropertyValue(n)||'').trim(); return x||f; }
+  var C={primary:v('--primary','#EF6C86'),accent:v('--accent','#FF7A33'),accent2:v('--accent2','#5FCB6B'),dark:v('--dark','#5B2FA8'),cream:v('--cream','#FFF6EA'),white:'#FFFFFF'};
+  var TEMAS=[
+    {a:C.primary,b:C.dark,   ink:C.white,c1:C.accent2,c2:C.accent},
+    {a:C.accent, b:C.primary,ink:C.white,c1:C.cream,  c2:C.accent2},
+    {a:C.accent2,b:C.dark,   ink:C.white,c1:C.accent, c2:C.primary},
+    {a:C.cream,  b:C.accent2,ink:C.dark, c1:C.primary,c2:C.accent},
+    {a:C.dark,   b:C.accent, ink:C.white,c1:C.accent2,c2:C.cream},
+    {a:C.primary,b:C.accent2,ink:C.white,c1:C.dark,   c2:C.accent},
+    {a:C.accent, b:C.dark,   ink:C.white,c1:C.primary,c2:C.accent2},
+    {a:C.accent2,b:C.primary,ink:C.white,c1:C.dark,   c2:C.cream}
+  ];
+  var temaIdx=0;
+  var MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  function nextSat(){ var d=new Date(); d.setDate(d.getDate()+((6-d.getDay()+7)%7||7)); return d; }
+  function fmtInput(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function fechaTexto(val){ if(!val) return ''; var p=val.split('-'); var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2])); return DIAS[d.getDay()]+' '+parseInt(p[2],10)+' de '+MESES[parseInt(p[1])-1]; }
+  function fit(txt,weight,maxW,minS,maxS){ var sz=maxS; do{ ctx.font=weight+' '+sz+'px "Baloo 2","Trebuchet MS",sans-serif'; if(ctx.measureText(txt).width<=maxW) break; sz-=4; }while(sz>minS); return sz; }
+
+  function draw(){
+    var nombre=(document.getElementById('inv-nombre').value||'').trim()||'Nombre';
+    var edad=(document.getElementById('inv-edad').value||'').trim();
+    var fecha=document.getElementById('inv-fecha').value;
+    var hora=document.getElementById('inv-hora').value;
+    var t=TEMAS[temaIdx];
+    var g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,t.a); g.addColorStop(1,t.b);
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    var dots=[[95,130,26],[210,85,14],[W-115,155,30],[W-75,320,16],[130,H-170,22],[W-150,H-130,28],[W-95,H-330,14],[75,H-380,17]];
+    for(var i2=0;i2<dots.length;i2++){ ctx.beginPath(); ctx.fillStyle=(i2%2?t.c1:t.c2); ctx.globalAlpha=.9; ctx.arc(dots[i2][0],dots[i2][1],dots[i2][2],0,Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha=1; ctx.textAlign='center'; ctx.fillStyle=t.ink;
+    ctx.font='700 46px "Baloo 2","Trebuchet MS",sans-serif'; ctx.fillText('¡Te invito a mi fiesta!',W/2,310);
+    var ns=fit(nombre.toUpperCase(),'800',W-170,64,150);
+    ctx.font='800 '+ns+'px "Baloo 2","Trebuchet MS",sans-serif'; ctx.fillText(nombre.toUpperCase(),W/2,540);
+    if(edad){ ctx.font='700 62px "Baloo 2","Trebuchet MS",sans-serif'; ctx.fillText('cumple '+edad,W/2,660); }
+    if(fecha){ ctx.font='600 50px "Quicksand","Trebuchet MS",sans-serif'; ctx.fillText(fechaTexto(fecha),W/2,810); }
+    if(hora){ ctx.font='600 44px "Quicksand","Trebuchet MS",sans-serif'; ctx.fillText(hora,W/2,880); }
+    ctx.strokeStyle=t.ink; ctx.globalAlpha=.4; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(W/2-180,1075); ctx.lineTo(W/2+180,1075); ctx.stroke(); ctx.globalAlpha=1;
+    ctx.font='800 44px "Baloo 2","Trebuchet MS",sans-serif'; ctx.fillText(INV_SALON,W/2,1165);
+    ctx.font='500 32px "Quicksand","Trebuchet MS",sans-serif'; ctx.globalAlpha=.85; ctx.fillText(INV_DIR,W/2,1225); ctx.globalAlpha=1;
+  }
+
+  var temasWrap=document.getElementById('invTemas');
+  TEMAS.forEach(function(t,i){
+    var b=document.createElement('button'); b.type='button'; b.className='inv-tema';
+    b.style.background='linear-gradient(135deg,'+t.a+','+t.b+')';
+    b.setAttribute('aria-pressed', i===0?'true':'false');
+    b.setAttribute('aria-label','Tema '+(i+1));
+    b.addEventListener('click',function(){ temaIdx=i; for(var k=0;k<temasWrap.children.length;k++){ temasWrap.children[k].setAttribute('aria-pressed', k===i?'true':'false'); } draw(); });
+    temasWrap.appendChild(b);
+  });
+  document.getElementById('inv-fecha').value=fmtInput(nextSat());
+  ['inv-nombre','inv-edad','inv-fecha','inv-hora'].forEach(function(id){ document.getElementById(id).addEventListener('input',function(){ requestAnimationFrame(draw); }); });
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(draw); }
+  draw();
+
+  var hint=document.getElementById('invHint');
+  document.getElementById('invSave').addEventListener('click',function(){
+    try{
+      canvas.toBlob(function(blob){
+        if(!blob){ hint.textContent='No se pudo generar, intenta de nuevo.'; return; }
+        var nm=(document.getElementById('inv-nombre').value||'invitacion').trim().replace(/\s+/g,'-')||'invitacion';
+        var file=null; try{ file=new File([blob],'invitacion-'+nm+'.png',{type:'image/png'}); }catch(e){}
+        if(file && navigator.canShare && navigator.canShare({files:[file]})){
+          navigator.share({files:[file],title:'Invitación'}).catch(function(){});
+          return;
+        }
+        var url=URL.createObjectURL(blob);
+        var a=document.createElement('a'); a.href=url; a.download='invitacion-'+nm+'.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function(){ URL.revokeObjectURL(url); },4000);
+        hint.textContent='Si no se descargó sola, mantén presionada la imagen para guardarla.';
+      },'image/png');
+    }catch(err){ hint.textContent='Mantén presionada la imagen de arriba para guardarla.'; }
   });
 })();
 
